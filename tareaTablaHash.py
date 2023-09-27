@@ -6,61 +6,62 @@ letrasDic ={
     'b' : '02',
     'c' : '03',
     'd' : '04',
-    'f' : '05',
-    'g' : '06',
-    'h' : '07',
-    'i' : '08',
-    'j' : '09',
-    'k' : '10',
-    'l' : '11',
-    'm' : '12',
-    'n' : '13',
-    'ñ' : '14',
-    'o' : '15',
-    'p' : '16',
-    'q' : '17',
-    'r' : '18',
-    's' : '19',
-    't' : '20',
-    'u' : '21',
-    'v' : '22',
-    'w' : '23',
-    'x' : '24',
-    'y' : '25',
-    'z' : '26',
-    'A' : '27',
-    'B' : '28',
-    'C' : '29',
-    'D' : '30',
-    'E' : '31',
-    'F' : '32',
-    'G' : '33',
-    'H' : '34',
-    'I' : '35',
-    'J' : '36',
-    'K' : '37',
-    'L' : '38',
-    'M' : '39',
-    'N' : '40',
-    'Ñ' : '41',
-    'O' : '42',
-    'P' : '43',
-    'Q' : '44',
-    'R' : '45',
-    'S' : '46',
-    'T' : '47',
-    'U' : '48',
-    'V' : '49',
-    'W' : '50',
-    'X' : '51',
-    'Y' : '52',
-    'Z' : '53'
+    'e' : '05',
+    'f' : '06',
+    'g' : '07',
+    'h' : '08',
+    'i' : '09',
+    'j' : '10',
+    'k' : '11',
+    'l' : '12',
+    'm' : '13',
+    'n' : '14',
+    'ñ' : '15',
+    'o' : '16',
+    'p' : '17',
+    'q' : '18',
+    'r' : '19',
+    's' : '20',
+    't' : '21',
+    'u' : '22',
+    'v' : '23',
+    'w' : '24',
+    'x' : '25',
+    'y' : '26',
+    'z' : '27',
+    'A' : '28',
+    'B' : '29',
+    'C' : '30',
+    'D' : '31',
+    'E' : '32',
+    'F' : '33',
+    'G' : '34',
+    'H' : '35',
+    'I' : '36',
+    'J' : '37',
+    'K' : '38',
+    'L' : '39',
+    'M' : '40',
+    'N' : '41',
+    'Ñ' : '42',
+    'O' : '43',
+    'P' : '44',
+    'Q' : '45',
+    'R' : '46',
+    'S' : '47',
+    'T' : '48',
+    'U' : '49',
+    'V' : '50',
+    'W' : '51',
+    'X' : '52',
+    'Y' : '53',
+    'Z' : '54'
 }
 
 class Nodo:
-    def __init__(self, clave, valor) -> None:
+    def __init__(self, clave) -> None:
         self.cve = clave
-        self.val = valor
+        #self.val = valor
         self.sig = None
 
 class TabHash:
@@ -69,21 +70,40 @@ class TabHash:
         self.tabla = [None] * tamanio
     
     def functionHash(self, clave):
+        tempo = ""
+        for c in clave:
+            tran = ord(c)
+            if((tran>=65 and tran<=90) or 
+               (tran >= 97 and tran <= 122) or 
+               tran == 164 or tran == 165):
+                tempo+=letrasDic[c]
+            else:
+                tempo+=c
         
-        return 0
+        lon = len(tempo)
+        
+        if(lon == 1):
+            i= int(tempo) + 1
+        else:
+            tem = tempo[0]+tempo[lon-1]
+            i = int(tem) + 1
+        
+        return i
 
-    def insert(self, clave, valor):
+    def insert(self, clave):
         indice = self.functionHash(clave)
         if self.tabla[indice] == None:
-            self.tabla[indice] = Nodo(clave, valor)
-        
+            #self.tabla[indice] = Nodo(clave, valor)
+            self.tabla[indice] = Nodo(clave)
+
         else:
             #Solución de la colisión Encadenamiento 
             nodoAct = self.tabla[indice]
             while nodoAct.sig != None:
                 nodoAct = nodoAct.sig
             
-            nodoAct.sig = Nodo(clave, valor)
+            #nodoAct.sig = Nodo(clave, valor)
+            nodoAct.sig = Nodo(clave)
 
     def buscar(self, clave):
 
@@ -116,6 +136,17 @@ def alfaNum():
         
     return temp
 cad = alfaNum()
-print(cad)
-lon = len(cad)
-print(letrasDic[cad[lon-1]])
+print("Cadena ---> "+cad)
+cad="A"
+for n in cad:
+    print(ord(n))
+    if(ord(n)==65):
+        print("Si es la letra a porque dio 65")
+
+obj = TabHash(5)
+print("Indice --> "+str(obj.functionHash("8iEe")))
+#lon = len(cad)
+#c=cad[lon-1]
+#print()
+#n = letrasDic[c]
+#print(n)

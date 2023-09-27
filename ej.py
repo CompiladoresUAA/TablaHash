@@ -1,6 +1,6 @@
 class Nodo:
-    def __init__(self, clave, valor):
-        self.clave = clave
+    def __init__(self, valor):
+        #self.clave = clave
         self.valor = valor
         self.siguiente = None
 
@@ -15,13 +15,15 @@ class TablaHash:
     def insertar(self, clave, valor):
         indice = self.funcion_hash(clave)
         if self.tabla[indice] is None:
-            self.tabla[indice] = Nodo(clave, valor)
+            #self.tabla[indice] = Nodo(clave, valor)
+            self.tabla[indice] = Nodo(valor)
         else:
             # Si hay colisión, agregamos el elemento a la lista enlazada
             actual = self.tabla[indice]
             while actual.siguiente:
                 actual = actual.siguiente
-            actual.siguiente = Nodo(clave, valor)
+            #actual.siguiente = Nodo(clave, valor)
+            actual.siguiente = Nodo(valor)
 
     def buscar(self, clave):
         indice = self.funcion_hash(clave)
@@ -31,5 +33,6 @@ class TablaHash:
                 return actual.valor
             actual = actual.siguiente
         return None
-
-TablaHash("4Sa8gD",10)
+tab = TablaHash(10)
+tab.insertar("8A9r6m")
+print(tab.buscar("8A9r6m"))
