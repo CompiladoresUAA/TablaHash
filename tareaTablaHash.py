@@ -83,15 +83,16 @@ class TabHash:
         lon = len(tempo)
         
         if(lon == 1):
-            i= int(tempo) + 1
+            i= int(tempo)
         else:
             tem = tempo[0]+tempo[lon-1]
-            i = int(tem) + 1
+            i = int(tem)
         
         return i
 
     def insert(self, clave):
         indice = self.functionHash(clave)
+        #print("Indice --> "+str(indice))
         if self.tabla[indice] == None:
             #self.tabla[indice] = Nodo(clave, valor)
             self.tabla[indice] = Nodo(clave)
@@ -106,9 +107,20 @@ class TabHash:
             nodoAct.sig = Nodo(clave)
 
     def buscar(self, clave):
+        indice = self.functionHash(clave)
+        #print("Indice --> "+str(indice))
+        node = self.tabla[indice]
+        if(node == None):
+            print("No se encontro la clave "+clave)
+        else:
+            while node.sig == None:
+                if(clave == node.cve):
+                    print("Se encontro la clave "+clave)
+                    return
+            
+            print("No se encontro la clave "+clave)
 
-        pass
-
+            
 
 def aleat(a,b):
     return random.randint(a,b)
@@ -135,18 +147,33 @@ def alfaNum():
         i+=1
         
     return temp
-cad = alfaNum()
-print("Cadena ---> "+cad)
-cad="A"
+
+
+#cad = alfaNum()
+#print("Cadena ---> "+cad)
+''' cad="A"
 for n in cad:
     print(ord(n))
     if(ord(n)==65):
         print("Si es la letra a porque dio 65")
 
 obj = TabHash(5)
-print("Indice --> "+str(obj.functionHash("8iEe")))
+print("Indice --> "+str(obj.functionHash("8iEe")))'''
+'''obj = TabHash(100)
+obj.insert("5a8Db")
+obj.insert("4j0Wk")
+obj.insert("gP51N")
+print("----------------------------------------")
+obj.buscar("hola4")
+print("----------------------------------------")
+obj.buscar("5a8Db")
+print("----------------------------------------")
+obj.buscar("0ie34")
+print("----------------------------------------")
+obj.buscar("gP51N")
+print("----------------------------------------")
 #lon = len(cad)
 #c=cad[lon-1]
 #print()
 #n = letrasDic[c]
-#print(n)
+#print(n)'''
