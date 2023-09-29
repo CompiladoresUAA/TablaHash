@@ -89,7 +89,8 @@ class TabHash:
             i = int(tem)
         
         return i
-
+    def getTable(self):
+        return self.tabla
     def insert(self, clave):
         indice = self.functionHash(clave)
         #print("Indice --> "+str(indice))
