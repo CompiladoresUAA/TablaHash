@@ -63,7 +63,6 @@ letrasDic ={
 class Nodo:
     def __init__(self, clave) -> None:
         self.cve = clave
-        #self.val = valor
         self.sig = None
 
 class TabHash:
@@ -97,31 +96,26 @@ class TabHash:
         indice = self.functionHash(clave)
         
         if self.tabla[indice] == None:
-            #self.tabla[indice] = Nodo(clave, valor)
-            #print("Primer valor en el indice -> "+str(indice))
+            #Inserta el primer nodo en ese indice de la tabla
             self.tabla[indice] = Nodo(clave)
 
         else:
             #Solución de la colisión Encadenamiento 
             nodoAct = self.tabla[indice]
-            #print("Valores en i= "+str(indice))
-            #if(nodoAct.sig == None):
-                #print("Segundo Nodo")
+            
             while nodoAct.sig != None:
                 #print("clave en while -> "+nodoAct.cve+"  |  Nodo --> "+str(nodoAct.sig))
                 nodoAct = nodoAct.sig
             
-            #nodoAct.sig = Nodo(clave, valor)
             nodoAct.sig = Nodo(clave)
 
     def buscar(self, clave):
         indice = self.functionHash(clave)
-        #print("Indice --> "+str(indice))
         node = self.tabla[indice]
         if(node == None):
             print("No se encontro la clave "+clave)
         else:
-            while node.sig == None:
+            while node != None:
                 if(clave == node.cve):
                     print("Se encontro la clave "+clave)
                     return
@@ -133,7 +127,7 @@ class TabHash:
         temp = 0
         i = 0
         while key[i] != None:
-            #temp = ((temp * pow(2,SHIFT)))  
+            temp = ((temp * pow(2,SHIFT)))  
             pass    
 
 def aleat(a,b):
@@ -162,7 +156,20 @@ def alfaNum():
         
     return temp
 
-
+def checkString(key)->bool:
+    for c in key:
+        tran = ord(c)
+        if((tran>=65 and tran<=90) or 
+        (tran >= 97 and tran <= 122) or 
+        tran == 164 or tran == 165 or
+        (tran >=48 and tran <= 57)):
+            pass
+        else:
+            print("caracter Incorrecto --> "+c)
+            return False
+    
+    return True
+print(checkString("H"))
 #cad = alfaNum()
 #print("Cadena ---> "+cad)
 ''' cad="A"
@@ -204,7 +211,7 @@ for c in cad:
     print("caracter --> "+c)
     print("temp --> "+str(temp))
 '''
-obj = TabHash(100)
+'''obj = TabHash(100)
 obj.insert("5a8Db")
 obj.insert("4j0Wk")
 obj.insert("gP51N")
@@ -226,3 +233,22 @@ print("----------------------------------------")
 obj.buscar("0ie34")
 print("----------------------------------------")
 obj.buscar("gP51N")
+print("#############################\n########################\n#################")
+i = obj.functionHash("5a8Db")
+n = obj.tabla[i]
+if n == None:
+    print("No hy nada en el indice --> "+str(i))
+else:
+    print("Hay algo en ese posicion de la tabla")
+    while n != None:
+        print(n.cve)
+        n=n.sig
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$")
+while j < obj.tam:
+    node = obj.tabla[j]
+    while node != None:
+        print(node.cve)
+        node = node.sig
+    print("_______________")
+    j+=1
+    '''
