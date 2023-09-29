@@ -1,6 +1,7 @@
 from tkinter import * 
 from PIL import Image, ImageTk
-from tareaTablaHash import TabHash,Nodo
+from tareaTablaHash import TabHash,Nodo,alfaNum
+from tkinter import messagebox as mb
 # Creamos la raíz
 #root = Tk()
 
@@ -55,13 +56,17 @@ class ScreenOpts:
 class ScreenAddKey:
     def __init__(self,root,handleAdd) -> None:
         self.frame = Frame(root)
+        self.frame.config(bg="#5b5b5b")
         #self.frame.grid(row=0,column=5,sticky=W,pady=2)
         #self.frame.pack(side=TOP)
         self.label = Label(self.frame,text = "Ingresa clave: ")
+        self.label.config(bg="black",foreground="#4fff00")
         self.entry = Entry(self.frame)
-        self.button = Button(self.frame,text="Send value",command=handleAdd)
+        self.entry.config(bg="black",foreground="#4fff00",insertbackground="white")
+        self.button = Button(self.frame,text="Send value",command=handleAdd,activebackground="black",activeforeground="white")
         self.button.config(cursor="hand2")
-        self.label.grid(row=0,column=0,sticky=W,pady=2)
+        self.button.config(bg="black",foreground="#4fff00")
+        self.label.grid(row=0,column=0,sticky=W,pady=2,padx=4)
         self.entry.grid(row=0,column=1,sticky=W,pady=2)
         self.button.grid(row=1,column=1,sticky=E,pady=2)
     def getFrame(self)->Frame:
@@ -73,13 +78,17 @@ class ScreenAddKey:
     def handleAddKey(self)->None:
         print(self.getValue())
 class ScreenSearch:
-    def __init__(self,root) -> None:
+    def __init__(self,root,handleSearch) -> None:
         self.frame = Frame(root)
+        self.frame.config(bg="#5b5b5b")
         self.label = Label(self.frame,text="Ingresa Clave a buscar: ")
         self.entry = Entry(self.frame)
+        self.entry.config(bg="black",foreground="#4fff00",insertbackground="white")
         self.button = Button(self.frame,text="Aceptar")
-        self.button.config(cursor="hand2")
-        self.label.grid(row=0,column=0,sticky=W,pady=2)
+        self.button.config(bg="black",foreground="#4fff00")
+        self.button.config(cursor="hand2",activebackground="black",command=handleSearch,activeforeground="white")
+        self.label.config(bg="black",foreground="#4fff00")
+        self.label.grid(row=0,column=0,sticky=W,pady=2,padx=4)
         self.entry.grid(row=0,column=1,sticky=W,pady=2)
         self.button.grid(row=1,column=1,sticky=E,pady=2)
     def getFrame(self)->Frame:
@@ -93,25 +102,31 @@ class ScreenSearch:
 class ScreenShow:
     def __init__(self,root) -> None:
         self.frame = Frame(root)
-        self.frame.config(bg="#5b5b5b")
+        self.frame.config(bg="#5b5b5b",pady=30)
     def getFrame(self)->Frame:
         return self.frame
     def showElements(self,table:TabHash)->None:
         photo = PhotoImage(file = "./arrow.png")
+        j = 0
         for i,item in enumerate(table.getTable()) :
             if item != None:
-                self.button = Button(self.frame,text=item.cve)
-                self.button.config(width=10,cursor="hand2",bg="black",foreground="#4fff00")
-                self.button.grid(row=i,column=0,sticky=W,pady=30)
-                col = 11;    
+                createButton(self.frame,"Indice").grid(row=0,column=0,sticky=W,pady=2)
+                createButton(self.frame,"Cve").grid(row=0,column=11,sticky=W,pady=2)
+                createButton(self.frame,str(i)).grid(row=j+1,column=0,sticky=W,pady=2)
+                createButton(self.frame,item.cve).grid(row=j+1,column=11,sticky=W,pady=2)
+                
+                col = 22;    
                 while item.sig != None:
-                    #icon = Button(self.frame,text="-->")
-                    button = Button(self.frame,text=item.sig.cve)
-                    button.config(width=10,cursor="hand2",bg="black",foreground="#4fff00")
-                    #icon.grid(row=i,column=col,sticky=W,pady=2 )
-                    button.grid(row=i,column=col,sticky=E,pady=30)
+                    createButton(self.frame,item.sig.cve).grid(row=j+1,column=col,sticky=E,pady=2)
+                    
                     col += 11
                     item = item.sig
+                j = j+1
+def createButton(frame:Frame,text:str)->Button:    
+    button = Button(frame,text=text)
+    button.config(width=10,bg="black",foreground="#4fff00")
+    return button
+                
 class Screens:
     def __init__(self) -> None:
         self.startGui()
@@ -142,18 +157,21 @@ class Screens:
         self.screenAddKey.setValue("")
 
     def displayGenRanKey(self)->None:
-        pass
+        self.tableHash.insert(alfaNum())
+        mb.showinfo('Success', 'Key added successfully')
     def displayShowContent(self)->None:
         self.root.destroy()
         self.startGui()
         self.screenShow = ScreenShow(self.root)
-        self.screenShow.getFrame().pack(pady=2)
+        self.screenShow.getFrame().pack(side=LEFT,pady=2)
         self.screenShow.showElements(self.tableHash)
     def displaySearchKey(self)->None:
         self.root.destroy()
         self.startGui()
-        self.screenSearch = ScreenSearch(self.root)
+        self.screenSearch = ScreenSearch(self.root,self.handleSearch)
         self.screenSearch.getFrame().pack(pady=2)
+    def handleSearch(self)->None:
+        self.tableHash.buscar( self.screenSearch.getValue() )
     def displayExit(self)->None:
         self.root.destroy()
 obj = Screens()
