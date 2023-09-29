@@ -1,5 +1,7 @@
 import random
-
+#Constante 
+SHIFT : 4
+SIZE : 10
 #Diccionario de letras a un par de numeros
 letrasDic ={
     'a' : '01',
@@ -92,15 +94,20 @@ class TabHash:
 
     def insert(self, clave):
         indice = self.functionHash(clave)
-        #print("Indice --> "+str(indice))
+        
         if self.tabla[indice] == None:
             #self.tabla[indice] = Nodo(clave, valor)
+            #print("Primer valor en el indice -> "+str(indice))
             self.tabla[indice] = Nodo(clave)
 
         else:
             #Solución de la colisión Encadenamiento 
             nodoAct = self.tabla[indice]
+            #print("Valores en i= "+str(indice))
+            #if(nodoAct.sig == None):
+                #print("Segundo Nodo")
             while nodoAct.sig != None:
+                #print("clave en while -> "+nodoAct.cve+"  |  Nodo --> "+str(nodoAct.sig))
                 nodoAct = nodoAct.sig
             
             #nodoAct.sig = Nodo(clave, valor)
@@ -117,10 +124,16 @@ class TabHash:
                 if(clave == node.cve):
                     print("Se encontro la clave "+clave)
                     return
-            
+                node = node.sig
             print("No se encontro la clave "+clave)
 
-            
+
+    def hash(self,key)->int:
+        temp = 0
+        i = 0
+        while key[i] != None:
+            #temp = ((temp * pow(2,SHIFT)))  
+            pass    
 
 def aleat(a,b):
     return random.randint(a,b)
@@ -177,3 +190,38 @@ print("----------------------------------------")
 #print()
 #n = letrasDic[c]
 #print(n)'''
+###################
+'''
+cad = "875m"
+r = 0
+for c in cad:
+    temp = 0
+    if ord(c)>=48 and ord(c)<=57:
+        temp = ((temp * pow(2,8))+int(c)) % 10
+    else:
+        temp = ((temp * pow(2,8))+ord(c)) % 10
+    print("caracter --> "+c)
+    print("temp --> "+str(temp))
+'''
+obj = TabHash(100)
+obj.insert("5a8Db")
+obj.insert("4j0Wk")
+obj.insert("gP51N")
+obj.insert("5a8313Db")
+obj.insert("4j0efERWk")
+obj.insert("gP56547REWD1N")
+obj.insert("5a8313PPb")
+obj.insert("4j0ef5489k")
+obj.insert("gP5RUEWD1N")
+obj.insert("5aPb")
+obj.insert("49k")
+obj.insert("gPN")
+print("##################################################\n")
+print("----------------------------------------")
+obj.buscar("hola4")
+print("----------------------------------------")
+obj.buscar("5a8Db")
+print("----------------------------------------")
+obj.buscar("0ie34")
+print("----------------------------------------")
+obj.buscar("gP51N")
