@@ -1,7 +1,7 @@
 from tkinter import * 
-from PIL import Image, ImageTk
-from tareaTablaHash import TabHash,Nodo,alfaNum
+from tareaTablaHash import TabHash,Nodo,alfaNum,checkString
 from tkinter import messagebox as mb
+from screeninfo import get_monitors
 # Creamos la raíz
 #root = Tk()
 
@@ -106,7 +106,7 @@ class ScreenShow:
     def getFrame(self)->Frame:
         return self.frame
     def showElements(self,table:TabHash)->None:
-        photo = PhotoImage(file = "./arrow.png")
+       
         j = 0
         for i,item in enumerate(table.getTable()) :
             if item != None:
@@ -134,7 +134,10 @@ class Screens:
        
     def startGui(self)->None:
         self.root = Tk()
-        self.root.geometry('600x300')
+        primary_screen = get_monitors()[0]
+        w_width = primary_screen.width
+        w_height = primary_screen.height
+        self.root.geometry(f'{w_width}x{w_height}')
         self.root.config(bg="#595959")
         ret = Button(self.root,text="<-")
         ret.config(cursor="hand2",command=self.displayMenu,bg="black",foreground="#4fff00")
@@ -153,9 +156,12 @@ class Screens:
         self.screenAddKey = ScreenAddKey(self.root,self.handleAdd)
         self.screenAddKey.getFrame().pack(pady=2)
     def handleAdd(self)->None:    
-        self.tableHash.insert(self.screenAddKey.getValue())
-        self.screenAddKey.setValue("")
-
+        if checkString(self.screenAddKey.getValue()):
+            self.tableHash.insert(self.screenAddKey.getValue())
+            self.screenAddKey.setValue("")
+        else:
+            mb.showinfo("Value Incorrect","The value expected was an alphanumeric.")
+#https://python-course.eu/tkinter/dialogs-in-tkinter.php
     def displayGenRanKey(self)->None:
         self.tableHash.insert(alfaNum())
         mb.showinfo('Success', 'Key added successfully')
@@ -171,7 +177,10 @@ class Screens:
         self.screenSearch = ScreenSearch(self.root,self.handleSearch)
         self.screenSearch.getFrame().pack(pady=2)
     def handleSearch(self)->None:
-        self.tableHash.buscar( self.screenSearch.getValue() )
+        if self.tableHash.buscar( self.screenSearch.getValue() ) :
+            mb.showinfo('Success', 'The value was found')
+        else:
+            mb.showerror('The value doesn´t exist', 'The value specified isn´t in the table.')
     def displayExit(self)->None:
         self.root.destroy()
 obj = Screens()

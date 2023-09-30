@@ -114,13 +114,15 @@ class TabHash:
         node = self.tabla[indice]
         if(node == None):
             print("No se encontro la clave "+clave)
+            return False
         else:
             while node != None:
                 if(clave == node.cve):
                     print("Se encontro la clave "+clave)
-                    return
+                    return True
                 node = node.sig
             print("No se encontro la clave "+clave)
+            return False
 
 
     def hash(self,key)->int:
