@@ -1,7 +1,7 @@
 import random
 #Constante 
-SHIFT : 4
-SIZE : 10
+SHIFT = 4
+SIZE = 100
 #Diccionario de letras a un par de numeros
 letrasDic ={
     'a' : '01',
@@ -92,6 +92,7 @@ class TabHash:
         return i
     def getTable(self):
         return self.tabla
+    
     def insert(self, clave):
         indice = self.functionHash(clave)
         
@@ -128,9 +129,12 @@ class TabHash:
     def hash(self,key)->int:
         temp = 0
         i = 0
-        while key[i] != None:
-            temp = ((temp * pow(2,SHIFT)))  
-            pass    
+        lon = len(key) - 1 
+        while i < lon :
+            temp = ((temp * pow(2,SHIFT) + ord(key[i])) % SIZE)  
+            i+=1
+
+        return temp   
 
 def aleat(a,b):
     return random.randint(a,b)
@@ -163,7 +167,7 @@ def checkString(key)->bool:
         tran = ord(c)
         if((tran>=65 and tran<=90) or 
         (tran >= 97 and tran <= 122) or 
-        tran == 164 or tran == 165 or
+        (tran == 209 or tran == 241) or
         (tran >=48 and tran <= 57)):
             pass
         else:
@@ -171,7 +175,7 @@ def checkString(key)->bool:
             return False
     
     return True
-print(checkString("H"))
+
 #cad = alfaNum()
 #print("Cadena ---> "+cad)
 ''' cad="A"
@@ -253,4 +257,5 @@ while j < obj.tam:
         node = node.sig
     print("_______________")
     j+=1
-    '''
+print("indice --> "+str(obj.hash("hola Mundo")))
+'''
