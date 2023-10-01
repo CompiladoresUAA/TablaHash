@@ -2,63 +2,6 @@ import random
 #Constante 
 SHIFT = 4
 SIZE = 100
-#Diccionario de letras a un par de numeros
-letrasDic ={
-    'a' : '01',
-    'b' : '02',
-    'c' : '03',
-    'd' : '04',
-    'e' : '05',
-    'f' : '06',
-    'g' : '07',
-    'h' : '08',
-    'i' : '09',
-    'j' : '10',
-    'k' : '11',
-    'l' : '12',
-    'm' : '13',
-    'n' : '14',
-    'ñ' : '15',
-    'o' : '16',
-    'p' : '17',
-    'q' : '18',
-    'r' : '19',
-    's' : '20',
-    't' : '21',
-    'u' : '22',
-    'v' : '23',
-    'w' : '24',
-    'x' : '25',
-    'y' : '26',
-    'z' : '27',
-    'A' : '28',
-    'B' : '29',
-    'C' : '30',
-    'D' : '31',
-    'E' : '32',
-    'F' : '33',
-    'G' : '34',
-    'H' : '35',
-    'I' : '36',
-    'J' : '37',
-    'K' : '38',
-    'L' : '39',
-    'M' : '40',
-    'N' : '41',
-    'Ñ' : '42',
-    'O' : '43',
-    'P' : '44',
-    'Q' : '45',
-    'R' : '46',
-    'S' : '47',
-    'T' : '48',
-    'U' : '49',
-    'V' : '50',
-    'W' : '51',
-    'X' : '52',
-    'Y' : '53',
-    'Z' : '54'
-}
 
 class Nodo:
     def __init__(self, clave) -> None:
@@ -70,26 +13,16 @@ class TabHash:
         self.tam = tamanio
         self.tabla = [None] * tamanio
     
-    def functionHash(self, clave):
-        tempo = ""
-        for c in clave:
-            tran = ord(c)
-            if((tran>=65 and tran<=90) or 
-               (tran >= 97 and tran <= 122) or 
-               tran == 164 or tran == 165):
-                tempo+=letrasDic[c]
-            else:
-                tempo+=c
-        
-        lon = len(tempo)
-        
-        if(lon == 1):
-            i= int(tempo)
-        else:
-            tem = tempo[0]+tempo[lon-1]
-            i = int(tem)
-        
-        return i
+    def hash(self,key)->int:
+        temp = 0
+        i = 0
+        lon = len(key) - 1 
+        while i < lon :
+            temp = ((temp * pow(2,SHIFT) + ord(key[i])) % SIZE)  
+            i+=1
+
+        return temp
+
     def getTable(self):
         return self.tabla
     
@@ -110,7 +43,7 @@ class TabHash:
             nodoAct.sig = Nodo(clave)
 
     def buscar(self, clave):
-        indice = self.functionHash(clave)
+        indice = self.hash(clave)
         node = self.tabla[indice]
         if(node == None):
             print("No se encontro la clave "+clave)
@@ -122,18 +55,7 @@ class TabHash:
                     return True
                 node = node.sig
             print("No se encontro la clave "+clave)
-            return False
-
-
-    def hash(self,key)->int:
-        temp = 0
-        i = 0
-        lon = len(key) - 1 
-        while i < lon :
-            temp = ((temp * pow(2,SHIFT) + ord(key[i])) % SIZE)  
-            i+=1
-
-        return temp   
+            return False   
 
 def aleat(a,b):
     return random.randint(a,b)
