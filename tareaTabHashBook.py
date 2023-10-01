@@ -13,7 +13,7 @@ class TabHash:
         self.tam = tamanio
         self.tabla = [None] * tamanio
     
-    def hash(self,key)->int:
+    def functionHash(self,key)->int:
         temp = 0
         i = 0
         lon = len(key) - 1 
@@ -43,7 +43,7 @@ class TabHash:
             nodoAct.sig = Nodo(clave)
 
     def buscar(self, clave):
-        indice = self.hash(clave)
+        indice = self.functionHash(clave)
         node = self.tabla[indice]
         if(node == None):
             print("No se encontro la clave "+clave)

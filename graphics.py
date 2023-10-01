@@ -1,5 +1,6 @@
 from tkinter import * 
 from tareaTablaHash import TabHash,Nodo,alfaNum,checkString
+from tareaTabHashBook import TabHash as Tbook
 from tkinter import messagebox as mb
 from screeninfo import get_monitors
 # Creamos la raíz
@@ -35,6 +36,8 @@ class ScreenOpts:
     def __init__(self,root,handleAdd,handleRand,handleShow,handleSearch,handleExit) -> None:
         self.frame = Frame(root)
         self.frame.config(bg="#5b5b5b")
+        
+        Label(self.frame,width=20,height=1,bg="#595959",foreground="white",text="Elige una opción").grid(row=0,column=0,pady=10,sticky=W)
         self.btnAddOpt = Button(self.frame,text="Agregar clave",command=handleAdd,activebackground="black",activeforeground="white")
         self.btnAddOpt.config(width=20,cursor="hand2",bg="black",foreground="#4fff00")
         self.btnGenRand = Button(self.frame,text="Generar clave aleatoria",command=handleRand,activebackground="black",activeforeground="white")
@@ -46,11 +49,11 @@ class ScreenOpts:
         self.btnExit     = Button(self.frame,text="Salir",command=handleExit,activebackground="black",activeforeground="white")
         self.btnExit.config(width=20,cursor="hand2",bg="black",foreground="#4fff00")
         
-        self.btnAddOpt.grid(row=0,column=0,sticky=W,pady=2,padx=5)
-        self.btnGenRand.grid(row=1,column=0,sticky=W,pady=2,padx=5)
-        self.btnShowCont.grid(row=2,column=0,sticky=W,pady=2,padx=5)
-        self.btnSearch.grid(row=3,column=0,sticky=W,pady=2,padx=5)
-        self.btnExit.grid(row=4,column=0,sticky=W,pady=2,padx=5)
+        self.btnAddOpt.grid(row=1,column=0,sticky=W,pady=2,padx=5)
+        self.btnGenRand.grid(row=2,column=0,sticky=W,pady=2,padx=5)
+        self.btnShowCont.grid(row=3,column=0,sticky=W,pady=2,padx=5)
+        self.btnSearch.grid(row=4,column=0,sticky=W,pady=2,padx=5)
+        self.btnExit.grid(row=5,column=0,sticky=W,pady=2,padx=5)
     def getFrame(self)->Frame:
         return self.frame    
 class ScreenAddKey:
@@ -128,9 +131,12 @@ def createButton(frame:Frame,text:str)->Button:
     return button
                 
 class Screens:
-    def __init__(self) -> None:
+    def __init__(self,TableType) -> None:
+        if TableType == 1 : 
+            self.tableHash = Tbook(100)
+        else:
+            self.tableHash = TabHash(100)
         self.startGui()
-        self.tableHash = TabHash(100)
        
     def startGui(self)->None:
         self.root = Tk()
@@ -183,6 +189,22 @@ class Screens:
             mb.showerror('The value doesn´t exist', 'The value specified isn´t in the table.')
     def displayExit(self)->None:
         self.root.destroy()
-obj = Screens()
-obj.displayMenu()
-obj.getRoot().mainloop()
+def genScreen(root:Tk,op:int)->None:
+    root.destroy()
+    obj = Screens(op) 
+    obj.displayMenu()   
+    obj.getRoot().mainloop()    
+    
+if __name__ == '__main__':
+    init = Tk()
+    init.geometry("450x380")
+    init.config(bg="#595959")
+    Label(init,width=30,height=1,bg="#595959",foreground="white",text="Elige una opción").pack(pady=10)
+    opt1 = createButton(init,"Con función hash modulo.")
+    opt2 = createButton(init,"Con función hash alfanumerica.")
+    opt1.config(width=30,cursor="hand2",command=lambda: genScreen(init,1))
+    opt2.config(width=30,cursor="hand2",command=lambda: genScreen(init,2))
+    opt1.pack()
+    opt2.pack()
+    
+    init.mainloop()
