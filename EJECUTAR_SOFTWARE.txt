@@ -1,0 +1,3 @@
+Ejecutar el graphics.exe que esta en la carpeta dist.
+En ese ejecutable esta el codigo de hash de tiny y el metodo hash
+que nosotros desarrollamos cada una con su respectivo menu.
